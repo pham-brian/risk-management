@@ -1,0 +1,218 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<definitions xmlns="http://www.omg.org/spec/BPMN/20100524/MODEL" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:activiti="http://activiti.org/bpmn" xmlns:bpmndi="http://www.omg.org/spec/BPMN/20100524/DI" xmlns:omgdc="http://www.omg.org/spec/DD/20100524/DC" xmlns:omgdi="http://www.omg.org/spec/DD/20100524/DI" typeLanguage="http://www.w3.org/2001/XMLSchema" expressionLanguage="http://www.w3.org/1999/XPath" targetNamespace="http://www.activiti.org/processdef" xmlns:modeler="http://activiti.com/modeler" modeler:version="1.0ev" modeler:exportDateTime="20190111102100" modeler:modelId="1056177" modeler:modelVersion="3" modeler:modelLastUpdated="1547202038815">
+  <process id="DocumentApprove" name="DocumentApprove" isExecutable="true">
+    <startEvent id="start_process">
+      <extensionElements>
+        <modeler:editor-resource-id><![CDATA[startEvent1]]></modeler:editor-resource-id>
+      </extensionElements>
+    </startEvent>
+    <userTask id="business_review_task" name="Business User review document" activiti:candidateGroups="business_users">
+      <extensionElements>
+        <modeler:allow-send-email><![CDATA[true]]></modeler:allow-send-email>
+        <modeler:initiator-can-complete><![CDATA[false]]></modeler:initiator-can-complete>
+        <modeler:editor-resource-id><![CDATA[sid-88FBD40C-B2BF-48CD-A344-B45257319B20]]></modeler:editor-resource-id>
+      </extensionElements>
+    </userTask>
+    <userTask id="country_review_task" name="Country User review document" activiti:candidateGroups="country_users">
+      <extensionElements>
+        <modeler:allow-send-email><![CDATA[true]]></modeler:allow-send-email>
+        <modeler:initiator-can-complete><![CDATA[true]]></modeler:initiator-can-complete>
+        <modeler:editor-resource-id><![CDATA[sid-E2BB5890-5B1C-4EE2-908D-D51DA6772969]]></modeler:editor-resource-id>
+      </extensionElements>
+    </userTask>
+    <sequenceFlow id="sid-0F39DA64-5AE6-4420-B48D-A17A2642A3D4" sourceRef="start_process" targetRef="business_submit_action">
+      <extensionElements>
+        <modeler:editor-resource-id><![CDATA[sid-0F39DA64-5AE6-4420-B48D-A17A2642A3D4]]></modeler:editor-resource-id>
+      </extensionElements>
+    </sequenceFlow>
+    <userTask id="regional_review_task" name="Regional User review document" activiti:candidateGroups="regional_users">
+      <extensionElements>
+        <modeler:allow-send-email><![CDATA[true]]></modeler:allow-send-email>
+        <modeler:initiator-can-complete><![CDATA[true]]></modeler:initiator-can-complete>
+        <modeler:editor-resource-id><![CDATA[sid-37B9944E-91B4-4501-8455-9D268B3A93C4]]></modeler:editor-resource-id>
+      </extensionElements>
+    </userTask>
+    <exclusiveGateway id="regional_submit">
+      <extensionElements>
+        <modeler:editor-resource-id><![CDATA[sid-CD4AB669-AD2A-456E-8D38-D9ED90D1290D]]></modeler:editor-resource-id>
+      </extensionElements>
+    </exclusiveGateway>
+    <exclusiveGateway id="country_submit">
+      <extensionElements>
+        <modeler:editor-resource-id><![CDATA[sid-99A98C66-9B74-4249-A22D-884F6576335E]]></modeler:editor-resource-id>
+      </extensionElements>
+    </exclusiveGateway>
+    <endEvent id="end_process">
+      <extensionElements>
+        <modeler:editor-resource-id><![CDATA[sid-DB9BB5C2-C6E1-487D-BFAA-E54D97391709]]></modeler:editor-resource-id>
+      </extensionElements>
+    </endEvent>
+    <serviceTask id="reject_service" name="Return document to Business user" activiti:expression="${documentService.reject()}">
+      <extensionElements>
+        <modeler:editor-resource-id><![CDATA[sid-B18835EB-02E7-49D9-99A9-0C4480606EE9]]></modeler:editor-resource-id>
+      </extensionElements>
+    </serviceTask>
+    <sequenceFlow id="sid-344B7D4C-DF64-41C0-B448-6B6A60C3737A" name="Reject" sourceRef="regional_submit" targetRef="reject_service">
+      <extensionElements>
+        <modeler:editor-resource-id><![CDATA[sid-344B7D4C-DF64-41C0-B448-6B6A60C3737A]]></modeler:editor-resource-id>
+      </extensionElements>
+      <conditionExpression xsi:type="tFormalExpression"><![CDATA[${regionalApprove == false}]]></conditionExpression>
+    </sequenceFlow>
+    <sequenceFlow id="sid-9F4300C4-FB19-41B4-B01F-5129E02A8934" sourceRef="reject_service" targetRef="business_review_task">
+      <extensionElements>
+        <modeler:editor-resource-id><![CDATA[sid-9F4300C4-FB19-41B4-B01F-5129E02A8934]]></modeler:editor-resource-id>
+      </extensionElements>
+    </sequenceFlow>
+    <sequenceFlow id="sid-6B705353-6657-423A-A516-1DF2FB2956B8" sourceRef="business_review_task" targetRef="business_submit_action">
+      <extensionElements>
+        <modeler:editor-resource-id><![CDATA[sid-6B705353-6657-423A-A516-1DF2FB2956B8]]></modeler:editor-resource-id>
+      </extensionElements>
+    </sequenceFlow>
+    <sequenceFlow id="sid-A78D2705-093E-426A-9661-7FE978F0F29A" name="Reject" sourceRef="country_submit" targetRef="reject_service">
+      <extensionElements>
+        <modeler:editor-resource-id><![CDATA[sid-A78D2705-093E-426A-9661-7FE978F0F29A]]></modeler:editor-resource-id>
+      </extensionElements>
+      <conditionExpression xsi:type="tFormalExpression"><![CDATA[${countryApprove == false}]]></conditionExpression>
+    </sequenceFlow>
+    <serviceTask id="business_submit_action" name="Change document status" activiti:expression="${documentService.submitToCountry()}">
+      <extensionElements>
+        <modeler:editor-resource-id><![CDATA[sid-F57EAD32-4DCE-4701-AE56-0A6E8698D4BF]]></modeler:editor-resource-id>
+      </extensionElements>
+    </serviceTask>
+    <sequenceFlow id="sid-5283D0F6-6D38-4DBD-84C7-C2EAF2F4CB34" sourceRef="business_submit_action" targetRef="country_review_task">
+      <extensionElements>
+        <modeler:editor-resource-id><![CDATA[sid-5283D0F6-6D38-4DBD-84C7-C2EAF2F4CB34]]></modeler:editor-resource-id>
+      </extensionElements>
+    </sequenceFlow>
+    <serviceTask id="country_approve_action" name="Change document status" activiti:expression="${documentService.submitToRegion()}">
+      <extensionElements>
+        <modeler:editor-resource-id><![CDATA[sid-54BB8D12-CAB9-4B54-B29C-BB9DEAE4D8CD]]></modeler:editor-resource-id>
+      </extensionElements>
+    </serviceTask>
+    <sequenceFlow id="sid-C45BCA54-E75D-409A-BC5A-235845625B92" name="Approve" sourceRef="country_submit" targetRef="country_approve_action">
+      <extensionElements>
+        <modeler:editor-resource-id><![CDATA[sid-C45BCA54-E75D-409A-BC5A-235845625B92]]></modeler:editor-resource-id>
+      </extensionElements>
+      <conditionExpression xsi:type="tFormalExpression"><![CDATA[${countryApprove == true}]]></conditionExpression>
+    </sequenceFlow>
+    <sequenceFlow id="sid-54100199-44A7-4BDC-B8B9-4B32C54347BB" sourceRef="country_approve_action" targetRef="regional_review_task">
+      <extensionElements>
+        <modeler:editor-resource-id><![CDATA[sid-54100199-44A7-4BDC-B8B9-4B32C54347BB]]></modeler:editor-resource-id>
+      </extensionElements>
+    </sequenceFlow>
+    <sequenceFlow id="sid-0BE62187-8AAE-4034-B04E-96377C999B74" sourceRef="country_review_task" targetRef="country_submit">
+      <extensionElements>
+        <modeler:editor-resource-id><![CDATA[sid-0BE62187-8AAE-4034-B04E-96377C999B74]]></modeler:editor-resource-id>
+      </extensionElements>
+    </sequenceFlow>
+    <sequenceFlow id="sid-3F27C427-FB73-4368-B060-8DE09F8A0751" sourceRef="regional_review_task" targetRef="regional_submit">
+      <extensionElements>
+        <modeler:editor-resource-id><![CDATA[sid-3F27C427-FB73-4368-B060-8DE09F8A0751]]></modeler:editor-resource-id>
+      </extensionElements>
+    </sequenceFlow>
+    <serviceTask id="regional_approve_action" name="Change document status" activiti:expression="${documentService.submitToRegion()}">
+      <extensionElements>
+        <modeler:editor-resource-id><![CDATA[sid-DA801A8B-001A-4607-88D9-70B4BAF81327]]></modeler:editor-resource-id>
+      </extensionElements>
+    </serviceTask>
+    <sequenceFlow id="sid-0C94E98A-CE00-4BC7-AB39-2B485D122776" name="Approve" sourceRef="regional_submit" targetRef="regional_approve_action">
+      <extensionElements>
+        <modeler:editor-resource-id><![CDATA[sid-0C94E98A-CE00-4BC7-AB39-2B485D122776]]></modeler:editor-resource-id>
+      </extensionElements>
+      <conditionExpression xsi:type="tFormalExpression"><![CDATA[${regionalApprove == true}]]></conditionExpression>
+    </sequenceFlow>
+    <sequenceFlow id="sid-6A5C60EA-097C-4F04-ADC0-81902C219B50" sourceRef="regional_approve_action" targetRef="end_process">
+      <extensionElements>
+        <modeler:editor-resource-id><![CDATA[sid-6A5C60EA-097C-4F04-ADC0-81902C219B50]]></modeler:editor-resource-id>
+      </extensionElements>
+    </sequenceFlow>
+  </process>
+  <bpmndi:BPMNDiagram id="BPMNDiagram_DocumentApprove">
+    <bpmndi:BPMNPlane bpmnElement="DocumentApprove" id="BPMNPlane_DocumentApprove">
+      <bpmndi:BPMNShape bpmnElement="start_process" id="BPMNShape_start_process">
+        <omgdc:Bounds height="30.0" width="30.0" x="-15.0" y="-15.0"/>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape bpmnElement="business_review_task" id="BPMNShape_business_review_task">
+        <omgdc:Bounds height="80.0" width="100.0" x="-50.0" y="-40.0"/>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape bpmnElement="country_review_task" id="BPMNShape_country_review_task">
+        <omgdc:Bounds height="80.0" width="100.0" x="-50.0" y="-40.0"/>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape bpmnElement="regional_review_task" id="BPMNShape_regional_review_task">
+        <omgdc:Bounds height="80.0" width="100.0" x="-50.0" y="-40.0"/>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape bpmnElement="regional_submit" id="BPMNShape_regional_submit">
+        <omgdc:Bounds height="40.0" width="40.0" x="-20.0" y="-20.0"/>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape bpmnElement="country_submit" id="BPMNShape_country_submit">
+        <omgdc:Bounds height="40.0" width="40.0" x="-20.0" y="-20.0"/>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape bpmnElement="end_process" id="BPMNShape_end_process">
+        <omgdc:Bounds height="28.0" width="28.0" x="-14.0" y="-14.0"/>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape bpmnElement="reject_service" id="BPMNShape_reject_service">
+        <omgdc:Bounds height="80.0" width="100.0" x="-50.0" y="-40.0"/>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape bpmnElement="business_submit_action" id="BPMNShape_business_submit_action">
+        <omgdc:Bounds height="80.0" width="100.0" x="-50.0" y="-40.0"/>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape bpmnElement="country_approve_action" id="BPMNShape_country_approve_action">
+        <omgdc:Bounds height="80.0" width="100.0" x="-50.0" y="-40.0"/>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape bpmnElement="regional_approve_action" id="BPMNShape_regional_approve_action">
+        <omgdc:Bounds height="80.0" width="100.0" x="-50.0" y="-40.0"/>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNEdge bpmnElement="sid-0BE62187-8AAE-4034-B04E-96377C999B74" id="BPMNEdge_sid-0BE62187-8AAE-4034-B04E-96377C999B74">
+        <omgdi:waypoint x="460.0" y="178.77777777777777"/>
+        <omgdi:waypoint x="502.58849557522126" y="178.58849557522123"/>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge bpmnElement="sid-A78D2705-093E-426A-9661-7FE978F0F29A" id="BPMNEdge_sid-A78D2705-093E-426A-9661-7FE978F0F29A">
+        <omgdi:waypoint x="522.5" y="158.5"/>
+        <omgdi:waypoint x="522.5" y="48.0"/>
+        <omgdi:waypoint x="430.0" y="48.0"/>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge bpmnElement="sid-6A5C60EA-097C-4F04-ADC0-81902C219B50" id="BPMNEdge_sid-6A5C60EA-097C-4F04-ADC0-81902C219B50">
+        <omgdi:waypoint x="1090.0" y="178.49494949494948"/>
+        <omgdi:waypoint x="1125.0007141581866" y="178.14140692769507"/>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge bpmnElement="sid-0C94E98A-CE00-4BC7-AB39-2B485D122776" id="BPMNEdge_sid-0C94E98A-CE00-4BC7-AB39-2B485D122776">
+        <omgdi:waypoint x="924.4296296296296" y="178.57037037037037"/>
+        <omgdi:waypoint x="990.0" y="178.81412639405204"/>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge bpmnElement="sid-54100199-44A7-4BDC-B8B9-4B32C54347BB" id="BPMNEdge_sid-54100199-44A7-4BDC-B8B9-4B32C54347BB">
+        <omgdi:waypoint x="700.0" y="179.0"/>
+        <omgdi:waypoint x="735.0" y="179.0"/>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge bpmnElement="sid-3F27C427-FB73-4368-B060-8DE09F8A0751" id="BPMNEdge_sid-3F27C427-FB73-4368-B060-8DE09F8A0751">
+        <omgdi:waypoint x="835.0" y="179.0"/>
+        <omgdi:waypoint x="886.0" y="179.0"/>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge bpmnElement="sid-344B7D4C-DF64-41C0-B448-6B6A60C3737A" id="BPMNEdge_sid-344B7D4C-DF64-41C0-B448-6B6A60C3737A">
+        <omgdi:waypoint x="905.5" y="158.5"/>
+        <omgdi:waypoint x="905.5" y="48.0"/>
+        <omgdi:waypoint x="430.0" y="48.0"/>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge bpmnElement="sid-C45BCA54-E75D-409A-BC5A-235845625B92" id="BPMNEdge_sid-C45BCA54-E75D-409A-BC5A-235845625B92">
+        <omgdi:waypoint x="541.5" y="178.5"/>
+        <omgdi:waypoint x="600.0" y="178.5"/>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge bpmnElement="sid-5283D0F6-6D38-4DBD-84C7-C2EAF2F4CB34" id="BPMNEdge_sid-5283D0F6-6D38-4DBD-84C7-C2EAF2F4CB34">
+        <omgdi:waypoint x="325.0" y="179.0"/>
+        <omgdi:waypoint x="360.0" y="179.0"/>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge bpmnElement="sid-0F39DA64-5AE6-4420-B48D-A17A2642A3D4" id="BPMNEdge_sid-0F39DA64-5AE6-4420-B48D-A17A2642A3D4">
+        <omgdi:waypoint x="275.0" y="270.0"/>
+        <omgdi:waypoint x="275.0" y="219.0"/>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge bpmnElement="sid-6B705353-6657-423A-A516-1DF2FB2956B8" id="BPMNEdge_sid-6B705353-6657-423A-A516-1DF2FB2956B8">
+        <omgdi:waypoint x="180.0" y="179.0"/>
+        <omgdi:waypoint x="225.0" y="179.0"/>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge bpmnElement="sid-9F4300C4-FB19-41B4-B01F-5129E02A8934" id="BPMNEdge_sid-9F4300C4-FB19-41B4-B01F-5129E02A8934">
+        <omgdi:waypoint x="330.0" y="48.0"/>
+        <omgdi:waypoint x="130.0" y="48.0"/>
+        <omgdi:waypoint x="130.0" y="139.0"/>
+      </bpmndi:BPMNEdge>
+    </bpmndi:BPMNPlane>
+  </bpmndi:BPMNDiagram>
+</definitions>
